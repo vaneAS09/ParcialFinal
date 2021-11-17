@@ -1,9 +1,9 @@
 #!/bin/bash
-#Actualización del servidor
+#ActualizaciÃ³n del servidor
 sudo -i yum install -y vim
 
 #Activamos el servicio firewall
-service firewall start
+service firewalld start
 
 #Detenemos el administrador de red
 service NetworkManager stop
