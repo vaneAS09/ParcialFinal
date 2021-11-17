@@ -1,0 +1,28 @@
+Parcial Final - Intalación de servidor de streaming Streama protegido por Firewall
+
+Pasos de configuración
+
+1. Instalamos el Java versión 8 dado que es posible que Streama no funcione con Java 7 o 10.
+
+$ sudo apt install openjdk-8-jre
+
+2. Creamos una carpeta para el almacenamiento de los archivos de Streama.
+
+$ mkdir /home/user/streama
+
+3. Ingreamos al directorio creado y descargamos la última imagen con el comando wget
+
+$ cd /home/user/streama
+$ wget https://github.com/streamaserver/streama/releases/download/v1.6.1/streama-1.6.1.war
+
+4. Aplicamos el siguiente comando para que el .war sea ejecutable.
+
+$ chmod +x streama-1.6.1.war
+
+5. Dentro de la carpeta del Streama.
+
+$ java -jar streama-1.6.1.war
+
+En el momento en el que aparece la siguiente línea podemos probar el servicio desde el navegador web
+
+Grails application running at http://localhost:8080 in environment: production
