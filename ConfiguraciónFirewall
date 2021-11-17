@@ -1,0 +1,48 @@
+Configuración servidor firewallST:
+
+Paso a paso
+
+1- Detenemos el servicio “NetworkManager” para evitar conflictos.
+
+service NetworkManager stop
+
+chkconfig NetworkManager off
+
+2. Definimos las Zonas en firewallNAT
+
+- Zona internal interfaz de privada eth2
+- Zona dmz interfaz de red pública eth1
+
+firewall-cmd --get-zones
+firewall-cmd --list-all-zones
+
+3. Asignamos  las interfaces a las zonas.
+
+firewall-cmd --permanent --zone=dmz --add-interface=eth1
+firewall-cmd --permanent --zone=internal --add-interface=eth2
+firewall-cmd --reload
+firewall-cmd --list-all-zones
+
+sudo firewall-cmd --zone=internal --change-interface=eth1
+
+4. Generamos las reglas
+
+firewall-cmd --direct  --permanent --add-rule ipv4 nat POSTROUTING 0 -o eth1 -j MASQUERADE
+firewall-cmd --direct  --permanent --add-rule ipv4 filter FORWARD 0 -i eth2 -o eth1 -j ACCEPT
+firewall-cmd --direct  --permanent --add-rule ipv4 filter FORWARD 0 -i eth1 -o eth2 -m state --state RELATED,ESTABLISHED -j ACCEPT
+
+5. Agregamos el servicio http en el firewall
+firewall-cmd --permanent --zone=dmz --add-service=http
+
+6. Agregamos el protocolo con el puerto
+
+sudo firewall-cmd --zone=dmz --add-port=8080/tcp --permanent 
+
+7. Aplicamos el redireccionamiento
+
+firewall-cmd --zone="dmz" --add-forward-port=port=8080:proto=tcp:toport=8080:toaddr= 192.168.70.4 --permanent
+firewall-cmd --zone="internal" --add-forward-port=port=8080:proto=tcp:toport=8080:toaddr=192.168.70.4 --permanent
+
+8. Reiniciamos el servicio firewall
+firewall-cmd --reload
+
